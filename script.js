@@ -1,12 +1,12 @@
 const PRODUCTS=[
 {id:1,name:"Jollof Rice & Chicken",price:45,cat:"Rice",image:"jollof.jpg",desc:"Spiced jollof rice served with tender chicken."},
-{id:2,name:"Fried Rice & Chicken",price:50,cat:"Rice",image: "jollof.jpg":"🍗",desc:"Flavorful fried rice with crispy chicken."},
-{id:3,name:"Chicken Burger",price:35,cat:"Burgers",image: "jollof.jpg":"🍔",desc:"Juicy chicken burger with fresh toppings."},
-{id:4,name:"Beef Pizza",price:60,cat:"Pizza",image: "jollof.jpg":"🍕",desc:"Loaded beef pizza with melted cheese."},
-{id:5,name:"Grilled Chicken",price:55,cat:"Chicken",image: "jollof.jpg":"🍗",desc:"Seasoned grilled chicken with a smoky finish."},
-{id:6,name:"Chicken Wings",price:40,cat:"Chicken",image: "jollof.jpg":"🍗",desc:"Crispy wings served with your favorite sauce."},
-{id:7,name:"Meat Lovers Pizza",price:70,cat:"Pizza",image: "jollof.jpg":"🍕",desc:"A rich pizza loaded with savory toppings."},
-{id:8,name:"Malt",price:12,cat:"Drinks",image: "jollof.jpg":"🥤",desc:"Chilled malt drink."}
+{id:2,name:"Fried Rice & Chicken",price:50,cat:"Rice",image: "jollof.jpg",desc:"Flavorful fried rice with crispy chicken."},
+{id:3,name:"Chicken Burger",price:35,cat:"Burgers",image: "jollof.jpg",desc:"Juicy chicken burger with fresh toppings."},
+{id:4,name:"Beef Pizza",price:60,cat:"Pizza",image: "jollof.jpg",desc:"Loaded beef pizza with melted cheese."},
+{id:5,name:"Grilled Chicken",price:55,cat:"Chicken",image: "jollof.jpg",desc:"Seasoned grilled chicken with a smoky finish."},
+{id:6,name:"Chicken Wings",price:40,cat:"Chicken",image: "jollof.jpg",desc:"Crispy wings served with your favorite sauce."},
+{id:7,name:"Meat Lovers Pizza",price:70,cat:"Pizza",image: "jollof.jpg",desc:"A rich pizza loaded with savory toppings."},
+{id:8,name:"Malt",price:12,cat:"Drinks",image: "jollof.jpg",desc:"Chilled malt drink."}
 ];
 
 function money(n){return "GH₵"+Number(n).toFixed(2).replace(".00","")}
@@ -14,7 +14,7 @@ function getCart(){return JSON.parse(localStorage.getItem("uptownCart")||"[]")}
 function saveCart(c){localStorage.setItem("uptownCart",JSON.stringify(c));updateCount()}
 function updateCount(){let n=getCart().reduce((s,x)=>s+x.qty,0);document.querySelectorAll("#cartCount").forEach(e=>e.textContent=n)}
 function addToCart(id){let c=getCart(),item=c.find(x=>x.id===id);if(item)item.qty++;else c.push({id,qty:1});saveCart(c);alert("Added to cart!")}
-{id:1,name:"Jollof Rice & Chicken",price:45,cat:"Rice",image:"jollof.jpg",desc:"Spiced jollof rice served with tender chicken."},
+function productCard(p){return `<article class="food-card"><div class="food-img"><img src="${p.image}" alt="${p.name}"></div><div class="food-body"><h3>${p.name}</h3><p>${p.desc}</p><div class="price"><span>${money(p.price)}</span><button class="add" onclick="addToCart(${p.id})">Add to cart</button></div></div></article>`}
 function renderMenu(cat="All"){let el=document.getElementById("menuGrid");if(!el)return;let list=cat==="All"?PRODUCTS:PRODUCTS.filter(p=>p.cat===cat);el.innerHTML=list.map(productCard).join("")}
 function renderFeatured(){let el=document.getElementById("featuredGrid");if(el)el.innerHTML=PRODUCTS.slice(0,4).map(productCard).join("")}
 function renderCart(){let el=document.getElementById("cartItems");if(!el)return;let c=getCart();if(!c.length){el.innerHTML="<div class='summary'><h2>Your cart is empty.</h2><p>Add some delicious meals from the menu.</p><a class='btn' href='menu.html'>Browse menu</a></div>";document.getElementById("subtotal").textContent="GH₵0";document.getElementById("delivery").textContent="GH₵0";document.getElementById("total").textContent="GH₵0";return}let sub=0;el.innerHTML=c.map(x=>{let p=PRODUCTS.find(p=>p.id===x.id),line=p.price*x.qty;sub+=line;return `<div class="cart-row"><div class="cart-image: "jollof.jpg"">${p.image: "jollof.jpg"}</div><div style="flex:1"><h3>${p.name}</h3><strong>${money(p.price)}</strong><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${x.qty}</span><button onclick="changeQty(${p.id},1)">+</button><button class="remove" onclick="removeItem(${p.id})">Remove</button></div></div><strong>${money(line)}</strong></div>`}).join("");let delivery=sub?10:0;document.getElementById("subtotal").textContent=money(sub);document.getElementById("delivery").textContent=money(delivery);document.getElementById("total").textContent=money(sub+delivery)}

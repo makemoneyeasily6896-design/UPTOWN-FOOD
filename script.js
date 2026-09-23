@@ -1,12 +1,12 @@
 const PRODUCTS=[
 {id:1,name:"Jollof Rice & Chicken",price:45,cat:"Rice",image: "jollof.jpg",desc:"Spiced jollof rice served with tender chicken."},
-{id:2,name:"Fried Rice & Chicken",price:50,cat:"Rice",emoji:"🍗",desc:"Flavorful fried rice with crispy chicken."},
-{id:3,name:"Chicken Burger",price:35,cat:"Burgers",emoji:"🍔",desc:"Juicy chicken burger with fresh toppings."},
-{id:4,name:"Beef Pizza",price:60,cat:"Pizza",emoji:"🍕",desc:"Loaded beef pizza with melted cheese."},
-{id:5,name:"Grilled Chicken",price:55,cat:"Chicken",emoji:"🍗",desc:"Seasoned grilled chicken with a smoky finish."},
-{id:6,name:"Chicken Wings",price:40,cat:"Chicken",emoji:"🍗",desc:"Crispy wings served with your favorite sauce."},
-{id:7,name:"Meat Lovers Pizza",price:70,cat:"Pizza",emoji:"🍕",desc:"A rich pizza loaded with savory toppings."},
-{id:8,name:"Malt",price:12,cat:"Drinks",emoji:"🥤",desc:"Chilled malt drink."}
+{id:2,name:"Fried Rice & Chicken",price:50,cat:"Rice",${item.${item.image}}:"🍗",desc:"Flavorful fried rice with crispy chicken."},
+{id:3,name:"Chicken Burger",price:35,cat:"Burgers",${item.${item.image}}:"🍔",desc:"Juicy chicken burger with fresh toppings."},
+{id:4,name:"Beef Pizza",price:60,cat:"Pizza",${item.image}:"🍕",desc:"Loaded beef pizza with melted cheese."},
+{id:5,name:"Grilled Chicken",price:55,cat:"Chicken",${item.image}:"🍗",desc:"Seasoned grilled chicken with a smoky finish."},
+{id:6,name:"Chicken Wings",price:40,cat:"Chicken",${item.image}:"🍗",desc:"Crispy wings served with your favorite sauce."},
+{id:7,name:"Meat Lovers Pizza",price:70,cat:"Pizza",${item.image}:"🍕",desc:"A rich pizza loaded with savory toppings."},
+{id:8,name:"Malt",price:12,cat:"Drinks",${item.image}:"🥤",desc:"Chilled malt drink."}
 ];
 
 function money(n){return "GH₵"+Number(n).toFixed(2).replace(".00","")}
@@ -14,10 +14,10 @@ function getCart(){return JSON.parse(localStorage.getItem("uptownCart")||"[]")}
 function saveCart(c){localStorage.setItem("uptownCart",JSON.stringify(c));updateCount()}
 function updateCount(){let n=getCart().reduce((s,x)=>s+x.qty,0);document.querySelectorAll("#cartCount").forEach(e=>e.textContent=n)}
 function addToCart(id){let c=getCart(),item=c.find(x=>x.id===id);if(item)item.qty++;else c.push({id,qty:1});saveCart(c);alert("Added to cart!")}
-function productCard(p){return `<article class="food-card"><div class="food-img">${p.emoji}</div><div class="food-body"><h3>${p.name}</h3><p>${p.desc}</p><div class="price"><span>${money(p.price)}</span><button class="add" onclick="addToCart(${p.id})">Add to cart</button></div></div></article>`}
+function productCard(p){return `<article class="food-card"><div class="food-img">${p.${item.image}}</div><div class="food-body"><h3>${p.name}</h3><p>${p.desc}</p><div class="price"><span>${money(p.price)}</span><button class="add" onclick="addToCart(${p.id})">Add to cart</button></div></div></article>`}
 function renderMenu(cat="All"){let el=document.getElementById("menuGrid");if(!el)return;let list=cat==="All"?PRODUCTS:PRODUCTS.filter(p=>p.cat===cat);el.innerHTML=list.map(productCard).join("")}
 function renderFeatured(){let el=document.getElementById("featuredGrid");if(el)el.innerHTML=PRODUCTS.slice(0,4).map(productCard).join("")}
-function renderCart(){let el=document.getElementById("cartItems");if(!el)return;let c=getCart();if(!c.length){el.innerHTML="<div class='summary'><h2>Your cart is empty.</h2><p>Add some delicious meals from the menu.</p><a class='btn' href='menu.html'>Browse menu</a></div>";document.getElementById("subtotal").textContent="GH₵0";document.getElementById("delivery").textContent="GH₵0";document.getElementById("total").textContent="GH₵0";return}let sub=0;el.innerHTML=c.map(x=>{let p=PRODUCTS.find(p=>p.id===x.id),line=p.price*x.qty;sub+=line;return `<div class="cart-row"><div class="cart-emoji">${p.emoji}</div><div style="flex:1"><h3>${p.name}</h3><strong>${money(p.price)}</strong><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${x.qty}</span><button onclick="changeQty(${p.id},1)">+</button><button class="remove" onclick="removeItem(${p.id})">Remove</button></div></div><strong>${money(line)}</strong></div>`}).join("");let delivery=sub?10:0;document.getElementById("subtotal").textContent=money(sub);document.getElementById("delivery").textContent=money(delivery);document.getElementById("total").textContent=money(sub+delivery)}
+function renderCart(){let el=document.getElementById("cartItems");if(!el)return;let c=getCart();if(!c.length){el.innerHTML="<div class='summary'><h2>Your cart is empty.</h2><p>Add some delicious meals from the menu.</p><a class='btn' href='menu.html'>Browse menu</a></div>";document.getElementById("subtotal").textContent="GH₵0";document.getElementById("delivery").textContent="GH₵0";document.getElementById("total").textContent="GH₵0";return}let sub=0;el.innerHTML=c.map(x=>{let p=PRODUCTS.find(p=>p.id===x.id),line=p.price*x.qty;sub+=line;return `<div class="cart-row"><div class="cart-${item.image}">${p.${item.image}}</div><div style="flex:1"><h3>${p.name}</h3><strong>${money(p.price)}</strong><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${x.qty}</span><button onclick="changeQty(${p.id},1)">+</button><button class="remove" onclick="removeItem(${p.id})">Remove</button></div></div><strong>${money(line)}</strong></div>`}).join("");let delivery=sub?10:0;document.getElementById("subtotal").textContent=money(sub);document.getElementById("delivery").textContent=money(delivery);document.getElementById("total").textContent=money(sub+delivery)}
 function changeQty(id,d){let c=getCart(),x=c.find(x=>x.id===id);if(!x)return;x.qty+=d;if(x.qty<1)c=c.filter(x=>x.id!==id);saveCart(c);renderCart()}
 function removeItem(id){saveCart(getCart().filter(x=>x.id!==id));renderCart()}
 function renderCheckout(){let el=document.getElementById("checkoutSummary");if(!el)return;let c=getCart();let sub=c.reduce((s,x)=>{let p=PRODUCTS.find(p=>p.id===x.id);return s+p.price*x.qty},0);let delivery=sub?10:0;el.innerHTML=c.map(x=>{let p=PRODUCTS.find(p=>p.id===x.id);return `<div class="sum-row"><span>${p.name} × ${x.qty}</span><strong>${money(p.price*x.qty)}</strong></div>`}).join("");document.getElementById("checkoutTotal").textContent=money(sub+delivery)}

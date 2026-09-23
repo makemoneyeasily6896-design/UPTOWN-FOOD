@@ -1,5 +1,5 @@
 const PRODUCTS=[
-{id:1,name:"Jollof Rice & Chicken",price:45,cat:"Rice",image: "jollof.jpg":"🍛",desc:"Spiced jollof rice served with tender chicken."},
+{id:1,name:"Jollof Rice & Chicken",price:45,cat:"Rice",image:"jollof.jpg",desc:"Spiced jollof rice served with tender chicken."},
 {id:2,name:"Fried Rice & Chicken",price:50,cat:"Rice",image: "jollof.jpg":"🍗",desc:"Flavorful fried rice with crispy chicken."},
 {id:3,name:"Chicken Burger",price:35,cat:"Burgers",image: "jollof.jpg":"🍔",desc:"Juicy chicken burger with fresh toppings."},
 {id:4,name:"Beef Pizza",price:60,cat:"Pizza",image: "jollof.jpg":"🍕",desc:"Loaded beef pizza with melted cheese."},
